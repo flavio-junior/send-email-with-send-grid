@@ -1,0 +1,4 @@
+spring:
+  sendgrid:
+    api-key: ${KEY-SEND-GRID}
+
