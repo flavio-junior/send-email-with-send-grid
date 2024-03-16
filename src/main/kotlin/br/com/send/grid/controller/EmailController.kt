@@ -1,7 +1,7 @@
 package br.com.send.grid.controller
 
+import br.com.send.grid.dto.EmailDTO
 import br.com.send.grid.service.EmailService
-import br.com.send.grid.vo.EmailVO
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PostMapping
@@ -17,8 +17,8 @@ class EmailController {
     private lateinit var emailService: EmailService
 
     @PostMapping
-    fun sendEmail(@RequestBody emailVO: EmailVO): ResponseEntity<EmailVO> {
-        emailService.sendEmail(emailVO)
+    fun sendEmail(@RequestBody emailDTO: EmailDTO): ResponseEntity<EmailDTO> {
+        emailService.sendEmail(emailDTO)
         return ResponseEntity.noContent().build()
     }
 }
