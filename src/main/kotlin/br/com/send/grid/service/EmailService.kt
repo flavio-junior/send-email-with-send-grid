@@ -1,5 +1,6 @@
 package br.com.send.grid.service
 
+import br.com.send.grid.exceptions.EmailException
 import br.com.send.grid.vo.EmailVO
 import com.sendgrid.Method
 import com.sendgrid.Request
@@ -8,8 +9,6 @@ import com.sendgrid.SendGrid
 import com.sendgrid.helpers.mail.Mail
 import com.sendgrid.helpers.mail.objects.Content
 import com.sendgrid.helpers.mail.objects.Email
-import jdk.incubator.vector.VectorOperators.LOG
-import org.apache.juli.logging.Log
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
@@ -37,13 +36,13 @@ class EmailService {
             request.body = mail.build()
             logger.info("Sending email to: ${emailVO.to}")
             val response: Response = sendGrid.api(request)
-            if(response.statusCode in 400..500) {
+            if (response.statusCode in 400..500) {
                 logger.error("Error sending email: ${emailVO.body}")
-            } else {
-                logger.info("Email sent! Status = : ${response.statusCode}")
+                throw EmailException(response.body)
             }
-        } catch (ex: IOException) {
-            throw ex
+            logger.info("Email sent! Status = : ${response.statusCode}")
+        } catch (ioException: IOException) {
+            throw EmailException(ioException.message)
         }
     }
 
